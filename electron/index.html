@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Kuro Anime</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%}
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#0b0b0f;
+  color:#fff;
+  overflow:hidden;
+}
+.header{
+  height:64px;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  padding:0 20px;
+  background:#101016;
+  border-bottom:1px solid #292932;
+}
+.logo{
+  font-size:22px;
+  font-weight:700;
+  white-space:nowrap;
+}
+.logo span{color:#9b5cff}
+.search{
+  width:330px;
+  height:38px;
+  padding:0 15px;
+  background:#17171f;
+  border:1px solid #292934;
+  border-radius:22px;
+  outline:none;
+  color:#fff;
+}
+.search:focus{border-color:#9b5cff}
+.categories{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex:1;
+  overflow-x:auto;
+}
+.category{
+  height:32px;
+  padding:0 11px;
+  background:#17171f;
+  border:1px solid #292932;
+  border-radius:6px;
+  color:#aaaab5;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.category:hover,.category.active{
+  background:#21182f;
+  border-color:#9b5cff;
+  color:#fff;
+}
+.mal-account{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.mal-user{
+  max-width:130px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  color:#aaaab5;
+  font-size:11px;
+}
+.mal-button{
+  height:32px;
+  padding:0 11px;
+  background:#17171f;
+  border:1px solid #343440;
+  border-radius:6px;
+  color:#fff;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.mal-button:hover,.mal-button.logged{
+  background:#21182f;
+  border-color:#9b5cff;
+}
+.mal-button:disabled{opacity:.5;cursor:not-allowed}
+
+.page{
+  height:calc(100vh - 64px);
+  overflow-y:auto;
+  padding:22px 20px 30px;
+}
+.hero{
+  min-height:120px;
+  margin-bottom:24px;
+  padding:24px;
+  display:flex;
+  align-items:center;
+  border:1px solid #292932;
+  border-radius:12px;
+  background:linear-gradient(135deg,#15111e,#101016);
+}
+.hero h1{font-size:27px;margin-bottom:7px}
+.hero p{color:#8e8e9a;font-size:13px}
+.section{margin-bottom:28px}
+.section-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+.section-title{font-size:19px;font-weight:700}
+.section-subtitle{color:#777782;font-size:11px;margin-top:4px}
+.view-all{
+  border:0;
+  background:transparent;
+  color:#9b5cff;
+  font-size:11px;
+  font-weight:700;
+  cursor:pointer;
+}
+.view-all:hover{text-decoration:underline}
+.row{
+  display:flex;
+  flex-direction:row;
+  justify-content:flex-start;
+  align-items:flex-start;
+  gap:12px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:0 0 7px 0;
+  width:100%;
+}
+
+.row .card{
+  flex:0 0 150px;
+  width:150px;
+  min-width:150px;
+  max-width:150px;
+}
+.card{
+  flex:0 0 150px;
+  width:150px;
+  min-width:150px;
+  max-width:150px;
+  cursor:pointer;
+}
+.poster{
+  width:150px;
+  height:215px;
+  border-radius:8px;
+  overflow:hidden;
+  background:#17171f;
+  border:1px solid #292932;
+}
+.poster img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.no-image{
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:12px;
+  color:#666672;
+  font-size:11px;
+  text-align:center;
+}
+.card-title{
+  margin-top:7px;
+  font-size:12px;
+  line-height:17px;
+  color:#e8e8ee;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.card:hover .poster{border-color:#9b5cff}
+.card:hover .card-title{color:#b982ff}
+.loading,.error,.empty{
+  width:100%;
+  padding:28px;
+  text-align:center;
+  color:#777782;
+  font-size:12px;
+}
+.error{color:#ef4444}
+::-webkit-scrollbar{height:7px;width:7px}
+::-webkit-scrollbar-track{background:#101016}
+::-webkit-scrollbar-thumb{background:#30303a;border-radius:10px}
+@media(max-width:1100px){
+  .categories{display:none}
+  .search{width:300px}
+}
+@media(max-width:700px){
+  .search{width:220px}
+  .mal-user{display:none}
+  .hero{padding:18px}
+  .card{flex-basis:135px}
+  .poster{width:135px;height:195px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+  <div class="logo">
+    Kuro <span>Anime</span>
+  </div>
+
+  <input
+    id="searchInput"
+    class="search"
+    type="text"
+    placeholder="Search anime..."
+    autocomplete="off"
+  >
+
+  <nav id="categories" class="categories"></nav>
+
+  <div class="mal-account">
+    <span id="malUser" class="mal-user"></span>
+    <button id="malButton" class="mal-button">
+      Login with MAL
+    </button>
+  </div>
+
+</header>
+
+<main class="page">
+
+  <section class="hero">
+    <div>
+      <h1 id="heroTitle">Kuro Anime</h1>
+      <p id="heroText">
+        Browse anime from AniChi and start watching instantly.
+      </p>
+    </div>
+  </section>
+
+  <div id="sections"></div>
+
+</main>
+
+<script>
+const CATEGORY_CONFIG = [
+  {
+    key:"latest",
+    title:"Latest Anime",
+    subtitle:"Recently updated episodes",
+    view:"Latest"
+  },
+  {
+    key:"newRelease",
+    title:"New Releases",
+    subtitle:"Recently added anime",
+    view:"New"
+  },
+  {
+    key:"upcoming",
+    title:"Upcoming Anime",
+    subtitle:"Anime that has not aired yet",
+    view:"Upcoming"
+  },
+  {
+    key:"ongoing",
+    title:"Ongoing Anime",
+    subtitle:"Currently airing anime",
+    view:"Ongoing"
+  },
+  {
+    key:"popular",
+    title:"Most Viewed",
+    subtitle:"Popular anime on AniChi",
+    view:"Popular"
+  },
+  {
+    key:"completed",
+    title:"Completed Anime",
+    subtitle:"Finished airing anime",
+    view:"Completed"
+  },
+  {
+    key:"schedule",
+    title:"Weekly Schedule",
+    subtitle:"Anime release schedule",
+    view:"Schedule"
+  }
+];
+
+const categories =
+  document.getElementById("categories");
+
+const sections =
+  document.getElementById("sections");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const heroTitle =
+  document.getElementById("heroTitle");
+
+const heroText =
+  document.getElementById("heroText");
+
+const malButton =
+  document.getElementById("malButton");
+
+const malUser =
+  document.getElementById("malUser");
+
+const externalPaths = {
+  latest:"https://anichi.to/latest-updated",
+  newRelease:"https://anichi.to/new-release",
+  upcoming:"https://anichi.to/status/not-yet-aired",
+  ongoing:"https://anichi.to/status/currently-airing",
+  popular:"https://anichi.to/most-viewed",
+  completed:"https://anichi.to/status/finished-airing",
+  schedule:"https://anichi.to/schedule"
+};
+
+function escapeHtml(value){
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function openAnime(anime){
+  const id =
+    anime?.id;
+
+  if(!id) return;
+
+  const title =
+    anime.title || "Anime";
+
+  location.href =
+    `anime.html?id=${encodeURIComponent(id)}&title=${encodeURIComponent(title)}`;
+}
+
+function createCard(anime){
+  const card =
+    document.createElement("article");
+
+  card.className =
+    "card";
+
+  const poster =
+    document.createElement("div");
+
+  poster.className =
+    "poster";
+
+  if(anime.image){
+    const img =
+      document.createElement("img");
+
+    img.src =
+      anime.image;
+
+    img.alt =
+      anime.title || "Anime";
+
+    img.loading =
+      "lazy";
+
+    img.onerror =
+      () => {
+        poster.innerHTML =
+          `<div class="no-image">${escapeHtml(anime.title)}</div>`;
+      };
+
+    poster.appendChild(img);
+
+  }else{
+    poster.innerHTML =
+      `<div class="no-image">${escapeHtml(anime.title)}</div>`;
+  }
+
+  const title =
+    document.createElement("div");
+
+  title.className =
+    "card-title";
+
+  title.textContent =
+    anime.title || "Anime";
+
+  card.appendChild(poster);
+  card.appendChild(title);
+
+  card.onclick =
+    () => openAnime(anime);
+
+  return card;
+}
+
+function createSection(config){
+  const section =
+    document.createElement("section");
+
+  section.className =
+    "section";
+
+  section.innerHTML = `
+    <div class="section-head">
+      <div>
+        <div class="section-title">
+          ${escapeHtml(config.title)}
+        </div>
+        <div class="section-subtitle">
+          ${escapeHtml(config.subtitle)}
+        </div>
+      </div>
+
+      <button class="view-all">
+        View All
+      </button>
+    </div>
+
+    <div class="row">
+      <div class="loading">
+        Loading ${escapeHtml(config.title)}...
+      </div>
+    </div>
+  `;
+
+  const viewAll =
+    section.querySelector(".view-all");
+
+  viewAll.onclick =
+    async () => {
+
+      if(
+        window.kuroAPI &&
+        typeof window.kuroAPI.openExternal === "function"
+      ){
+        await window.kuroAPI.openExternal(
+          externalPaths[config.key]
+        );
+      }
+    };
+
+  sections.appendChild(section);
+
+  return {
+    section,
+    row:section.querySelector(".row")
+  };
+}
+
+const sectionRefs =
+  new Map();
+
+CATEGORY_CONFIG.forEach(config => {
+  sectionRefs.set(
+    config.key,
+    createSection(config)
+  );
+});
+
+async function loadCategory(config){
+  const ref =
+    sectionRefs.get(config.key);
+
+  if(!ref) return;
+
+  ref.row.innerHTML =
+    `<div class="loading">Loading...</div>`;
+
+  try{
+
+    const response =
+      await window.kuroAPI.getCategory(
+        config.key
+      );
+
+    if(
+      !response ||
+      !response.success
+    ){
+      throw new Error(
+        response?.error ||
+        "Failed to load category."
+      );
+    }
+
+    const results =
+      Array.isArray(response.data)
+        ? response.data
+        : [];
+
+    ref.row.innerHTML =
+      "";
+
+    if(!results.length){
+      ref.row.innerHTML =
+        `<div class="empty">No anime found.</div>`;
+      return;
+    }
+
+    results.forEach(anime => {
+      ref.row.appendChild(
+        createCard(anime)
+      );
+    });
+
+  }catch(error){
+
+    console.error(
+      "Category error:",
+      config.key,
+      error
+    );
+
+    ref.row.innerHTML =
+      `<div class="error">${escapeHtml(error.message)}</div>`;
+  }
+}
+
+function setActiveCategory(key){
+  document
+    .querySelectorAll(".category")
+    .forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.key === key
+      );
+    });
+}
+
+function scrollToCategory(key){
+  const ref =
+    sectionRefs.get(key);
+
+  if(!ref) return;
+
+  ref.section.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+
+  setActiveCategory(key);
+}
+
+CATEGORY_CONFIG.forEach(config => {
+
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "category";
+
+  button.dataset.key =
+    config.key;
+
+  button.textContent =
+    config.view;
+
+  button.onclick =
+    () => scrollToCategory(config.key);
+
+  categories.appendChild(button);
+});
+
+async function loadAllCategories(){
+  heroTitle.textContent =
+    "Discover Anime";
+
+  heroText.textContent =
+    "Latest, new releases, upcoming, ongoing, popular, completed and weekly schedule from AniChi.";
+
+  await Promise.all(
+    CATEGORY_CONFIG.map(
+      config =>
+        loadCategory(config)
+    )
+  );
+
+  setActiveCategory("latest");
+}
+
+async function loadSearch(query){
+
+  heroTitle.textContent =
+    `Search: ${query}`;
+
+  heroText.textContent =
+    `AniChi search results for "${query}".`;
+
+  sections.innerHTML =
+    `
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <div class="section-title">
+              Search Results
+            </div>
+            <div class="section-subtitle">
+              Anime matching your search
+            </div>
+          </div>
+        </div>
+
+        <div id="searchRow" class="row">
+          <div class="loading">
+            Searching AniChi...
+          </div>
+        </div>
+      </section>
+    `;
+
+  try{
+
+    const response =
+      await window.kuroAPI.search(query);
+
+    if(
+      !response ||
+      !response.success
+    ){
+      throw new Error(
+        response?.error ||
+        "Search failed."
+      );
+    }
+
+    const results =
+      Array.isArray(response.data)
+        ? response.data
+        : [];
+
+    const row =
+      document.getElementById(
+        "searchRow"
+      );
+
+    row.innerHTML =
+      "";
+
+    if(!results.length){
+      row.innerHTML =
+        `<div class="empty">No anime found.</div>`;
+      return;
+    }
+
+    results.forEach(anime => {
+      row.appendChild(
+        createCard(anime)
+      );
+    });
+
+  }catch(error){
+
+    const row =
+      document.getElementById(
+        "searchRow"
+      );
+
+    if(row){
+      row.innerHTML =
+        `<div class="error">${escapeHtml(error.message)}</div>`;
+    }
+  }
+}
+
+searchInput.addEventListener(
+  "keydown",
+  event => {
+
+    if(
+      event.key !== "Enter"
+    ){
+      return;
+    }
+
+    const query =
+      searchInput.value.trim();
+
+    if(!query){
+      location.href =
+        "index.html";
+      return;
+    }
+
+    loadSearch(query);
+  }
+);
+
+async function updateMalAccount(){
+
+  try{
+
+    const result =
+      await window.kuroAPI.malStatus();
+
+    if(
+      result?.loggedIn &&
+      result.user
+    ){
+
+      malUser.textContent =
+        result.user.name ||
+        "MAL User";
+
+      malButton.textContent =
+        "Logout";
+
+      malButton.classList.add(
+        "logged"
+      );
+
+    }else{
+
+      malUser.textContent =
+        "";
+
+      malButton.textContent =
+        "Login with MAL";
+
+      malButton.classList.remove(
+        "logged"
+      );
+    }
+
+  }catch(error){
+
+    console.error(
+      "MAL account error:",
+      error
+    );
+  }
+}
+
+malButton.onclick =
+  async () => {
+
+    try{
+
+      const current =
+        await window.kuroAPI.malStatus();
+
+      if(
+        current?.loggedIn
+      ){
+
+        await window.kuroAPI.malLogout();
+
+        await updateMalAccount();
+
+        return;
+      }
+
+      malButton.disabled =
+        true;
+
+      malButton.textContent =
+        "Opening MAL...";
+
+      const result =
+        await window.kuroAPI.malLogin();
+
+      if(
+        !result?.success
+      ){
+        alert(
+          result?.error ||
+          "MAL login failed."
+        );
+      }
+
+      await updateMalAccount();
+
+    }catch(error){
+
+      console.error(
+        "MAL login error:",
+        error
+      );
+
+      alert(
+        error.message
+      );
+
+    }finally{
+
+      malButton.disabled =
+        false;
+    }
+  };
+
+(async () => {
+
+  try{
+
+    await window.kuroAPI.initAniChi();
+
+  }catch(error){
+
+    console.error(
+      "AniChi init error:",
+      error
+    );
+  }
+
+  await updateMalAccount();
+
+  const params =
+    new URLSearchParams(
+      location.search
+    );
+
+  const search =
+    params.get("search");
+
+  if(search){
+    searchInput.value =
+      search;
+
+    await loadSearch(search);
+
+  }else{
+    await loadAllCategories();
+  }
+
+})();
+</script>
+
+</body>
+</html>
