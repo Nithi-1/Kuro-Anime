@@ -29,7 +29,7 @@ Kuro Anime provides a clean and simple interface for discovering anime, watching
 ---
 
 
-```markdown
+
 ![Kuro Anime Home](screenshots/home.png)
 
 ![Kuro Anime Player](screenshots/player.png)
