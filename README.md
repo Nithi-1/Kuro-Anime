@@ -30,14 +30,18 @@ Kuro Anime provides a clean and simple interface for discovering anime, watching
 
 
 🛠️ Built With
-Electron
-Node.js
-JavaScript
-HTML
-CSS
-Axios
-Cheerio
+
+Electron,
+Node.js,
+JavaScript,
+HTML,
+CSS,
+Axios,
+Cheerio,
 Electron Builder
+
+---
+
 📡 Anime Source
 
 Kuro Anime uses AniChi as its anime source.
@@ -45,6 +49,8 @@ Kuro Anime uses AniChi as its anime source.
 The application does not host or store anime video files itself.
 
 Anime information, episodes, and playback depend on the external services used by the application.
+
+---
 
 📚 MyAnimeList Integration
 
@@ -67,6 +73,8 @@ Plan to Watch
 
 MyAnimeList authentication uses the MyAnimeList OAuth system.
 
+---
+
 💻 Installation
 
 Download the latest Windows installer from the Releases section.
@@ -82,6 +90,8 @@ Select an episode and start watching.
 
 An internet connection is required.
 
+---
+
 📥 Download
 
 The latest Windows installer is available in the GitHub Releases section.
@@ -91,6 +101,8 @@ Windows
 Download:
 
 Kuro Anime Setup 1.0.0.exe
+
+---
 
 👨‍💻 Development
 
@@ -159,6 +171,8 @@ Kuro-Anime/
 └── README.md
 ```
 
+---
+
 🎬 Player Controls
 
 Kuro Anime includes a player-only fullscreen mode.
@@ -183,6 +197,8 @@ to exit fullscreen.
 
 The fullscreen mode expands only the anime player instead of putting the entire Electron application into Windows fullscreen.
 
+---
+
 🔐 Privacy & Authentication
 
 MyAnimeList authentication is handled through the MyAnimeList OAuth system.
@@ -190,6 +206,8 @@ MyAnimeList authentication is handled through the MyAnimeList OAuth system.
 Kuro Anime does not require users to provide their MyAnimeList password directly to the application.
 
 Authentication tokens are stored locally by the application.
+
+---
 
 ⚠️ Disclaimer
 
@@ -202,6 +220,8 @@ Anime information, episodes, and playback depend on external services.
 The availability of anime content may change depending on those external services.
 
 Users are responsible for complying with applicable laws and the terms of the services they use.
+
+---
 
 📄 License
 
