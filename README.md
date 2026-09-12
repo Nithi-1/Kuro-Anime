@@ -139,6 +139,7 @@ dist/
 
 The generated installer can be installed on Windows without Node.js or npm.
 
+```bash
 📁 Project Structure
 Kuro-Anime/
 │
@@ -156,6 +157,8 @@ Kuro-Anime/
 ├── package-lock.json
 ├── .gitignore
 └── README.md
+```
+
 🎬 Player Controls
 
 Kuro Anime includes a player-only fullscreen mode.
