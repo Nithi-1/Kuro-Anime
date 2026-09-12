@@ -28,9 +28,6 @@ Kuro Anime provides a clean and simple interface for discovering anime, watching
 
 ---
 
-## 🖼️ Screenshots
-
-Add screenshots of Kuro Anime here.
 
 Example:
 
