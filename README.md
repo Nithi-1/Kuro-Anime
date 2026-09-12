@@ -100,24 +100,32 @@ Windows
 Download:
 
 Kuro Anime Setup 1.0.0.exe
+
 👨‍💻 Development
+
 Requirements
+
 Node.js
 npm
 Git
+
 1. Clone the Repository
+
 git clone https://github.com/Nithi-1/Kuro-Anime.git
 cd Kuro-Anime
+
 2. Install Dependencies
 
 Install the required packages:
 
 npm install
+
 3. Run Kuro Anime
 
 To run Kuro Anime during development:
 
 npm start
+
 4. Build the Windows Installer
 
 When you are ready to create the Windows .exe installer:
