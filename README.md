@@ -29,10 +29,6 @@ Kuro Anime provides a clean and simple interface for discovering anime, watching
 ---
 
 
-
-![Kuro Anime Home](screenshots/home.png)
-
-![Kuro Anime Player](screenshots/player.png)
 🛠️ Built With
 Electron
 Node.js
@@ -105,31 +101,41 @@ npm
 Git
 
 1. Clone the Repository
-
+   
+```bash
 git clone https://github.com/Nithi-1/Kuro-Anime.git
 cd Kuro-Anime
+```
 
 2. Install Dependencies
 
 Install the required packages:
 
+```bash
 npm install
+```
 
 3. Run Kuro Anime
 
 To run Kuro Anime during development:
 
+```bash
 npm start
+```
 
 4. Build the Windows Installer
 
 When you are ready to create the Windows .exe installer:
 
+```bash
 npm run build
+```
 
 The installer will be generated inside:
 
+```bash
 dist/
+```
 
 The generated installer can be installed on Windows without Node.js or npm.
 
